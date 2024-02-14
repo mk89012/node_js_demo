@@ -8,11 +8,19 @@ const mongoose = require('mongoose');
 const server = express();
 
 
-main().catch(err => console.log(err));
 
+mongoose.set("strictQuery",false)
 
-async function main() {
-    await mongoose.connect(process.env.CONNECTION_URL);
+  const connectDB= async function main() {
+    try{
+    const con=  await mongoose.connect(process.env.CONNECTION_URL);
+    console.log("connected db port"+con.connection.host);
+    }catch(error){
+
+      console.log(error);
+      process.exit(1);
+    }
+   
   
   }
 
@@ -32,8 +40,10 @@ server.use('/api',profileRouter.router);
 
 
    
-
-server.listen(process.env.PORT,()=>{
+connectDB().then(()=>{
+  server.listen(process.env.PORT,()=>{
     console.log("Server start successfully");
 })
+})
+
 
