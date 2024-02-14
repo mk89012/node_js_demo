@@ -3,6 +3,8 @@ const express = require("express");
 const morgan = require("morgan");
 const authRouter = require("./auth_module/authRoutes");
 const profileRouter = require("./profile_module/profileRoutes");
+const productRouter = require("./product_module/productRoutes");
+
 
 const mongoose = require('mongoose');
 const server = express();
@@ -34,6 +36,7 @@ server.use("/public",express.static('public'));
 server.use("/upload", express.static("upload"));
 server.use('/api',authRouter.router);  ///Auth Routes...
 server.use('/api',profileRouter.router); 
+server.use('/api',productRouter.router);
 
 
 

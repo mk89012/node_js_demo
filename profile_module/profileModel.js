@@ -2,7 +2,6 @@ const fs=require("fs");
 
 const mongoose = require('mongoose')
 const Joi = require('joi');
-const { ObjectId } = require("mongodb");
 
 const profileSchema = new mongoose.Schema({
     user_id:{
