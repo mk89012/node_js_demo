@@ -87,7 +87,15 @@ const createUser =async (req, res) => {
 
               });
     
-            return res.status(200).json({message:"Login SuccessFully", token:token });
+            return res.status(200).json({
+                message:"Login SuccessFully", 
+                token:token,
+                data:{
+                    name:"",
+                    email:"",
+                    profile_img:""
+                }
+             });
            }else{
             return res.status(200).json({message:"Wrong Password"});
            }
@@ -100,10 +108,30 @@ const createUser =async (req, res) => {
 
 
 
+ ///Login user api.......................................
+ const logOutUser =async (req, res)=>{
+    console.log(req.header.aut);
+    const token = req.headers.authorization?.split(' ')[1];
+
+    
+    try {
+    
+        return res.status(200).json({
+            status:true,
+            message:"Logout SuccessFully"});
+        
+    } catch (err) {
+        return res.status(400).json({ message: err.message })
+    }
+ };
+
+
+
  
 
  exports.createUser = createUser;
  exports.loginUser = loginUser;
+ exports.logOutUser =logOutUser;
 
 
 
