@@ -42,7 +42,7 @@ const createUser =async (req, res) => {
                 email: req.body.email,
                 password:password,
               });
-              await Profile.create({
+           var profile=   await Profile.create({
                 user_id:userRes._id,
                 name: req.body.name,
                 email: req.body.email,
@@ -53,7 +53,12 @@ const createUser =async (req, res) => {
                 expiresIn:'24h'
               });
        
-            return res.status(201).json({message:"Register SuccessFully", token: token});
+            return res.status(201).json({message:"Register SuccessFully", token: token,
+            data:{
+                name:profile.name,
+                email:profile.email,
+                profile_img:profile.profilePictureURL,
+            }});
         } catch (err) {
             return res.status(400).json({ message: err.message })
         }
@@ -82,18 +87,18 @@ const createUser =async (req, res) => {
 
            if(enterPassword==password){
             const token = jwt.sign({ email: user.email, fullName: user.name, _id: user._id }, process.env.JWT_SECRET_KEY, {
-                // expiresIn: '1 hour'
-                expiresIn:'24h'
+                expiresIn:'24h'    // expiresIn: '1 hour'
 
               });
-    
+
+              const profile= await Profile.findOne({user_id:user._id});
             return res.status(200).json({
                 message:"Login SuccessFully", 
                 token:token,
                 data:{
-                    name:"",
-                    email:"",
-                    profile_img:""
+                    name:profile.name,
+                    email:profile.email,
+                    profile_img:profile.profilePictureURL,
                 }
              });
            }else{

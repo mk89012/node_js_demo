@@ -31,8 +31,8 @@ let upload = multer({storage: storage})
 /// Here is auth api routes.....................
 
 router.post('/login_user', authController.loginUser)
-.post("/create_user",upload.single('profile_pic'),authController.createUser);
-// .post("/logout",authenticate,authController.logOutUser);
+.post("/create_user",upload.single('profile_pic'),authController.createUser)
+.post("/logout",authenticate,authController.logOutUser);
 
 
 exports.router = router;
