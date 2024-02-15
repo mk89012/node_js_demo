@@ -19,12 +19,12 @@ var db=mongoose.connection;
 const createUser =async (req, res) => {
     const { error } = validate(req.body)
     if (error) {
-        return res.status(400).send(error.details[0].message)
+        return res.status(400).send({status:false,message:"error.details[0].message"})
     }
     
     let user = await User.findOne({ email: req.body.email })
     if (user) {
-        return res.status(400).send('User already exisits. Please sign in')
+        return res.status(400).send({status:false,message:'User already exisits. Please sign in'})
     } else {
         try {
             const url = req.protocol + '://' + req.get("host");
@@ -40,27 +40,30 @@ const createUser =async (req, res) => {
 
             const userRes = await User.create({
                 email: req.body.email,
-                password:password,
+                password:password
               });
-           var profile=   await Profile.create({
-                user_id:userRes._id,
-                name: req.body.name,
-                email: req.body.email,
-                profilePictureURL: imageUrl,
-              });
+
               const token = jwt.sign({ email: userRes.email, fullName: userRes.name, _id: userRes._id }, process.env.JWT_SECRET_KEY, {
                 // expiresIn: '1 hour'
                 expiresIn:'24h'
               });
+           var profile= await Profile.create({
+                user_id:userRes._id,
+                name: req.body.name,
+                email: req.body.email,
+                profilePictureURL: imageUrl,
+                token: token
+              });
+             
        
-            return res.status(201).json({message:"Register SuccessFully", token: token,
+            return res.status(201).json({status:true,message:"Register SuccessFully", token: token,
             data:{
                 name:profile.name,
                 email:profile.email,
                 profile_img:profile.profilePictureURL,
             }});
         } catch (err) {
-            return res.status(400).json({ message: err.message })
+            return res.status(400).json({status:false, message: err.message })
         }
       
     }
@@ -70,15 +73,14 @@ const createUser =async (req, res) => {
 
 ///Login user api.......................................
  const loginUser =async (req, res)=>{
-    console.log(req.body);
     const { error } = validateLoginUser(req.body)
     if (error) {
         return res.status(400).send(error.details[0].message)
     }
     
     let user = await User.findOne({email: req.body.email });
-    if (user==false) {
-        return res.status(400).send('User is not found')
+    if (user==false||user==null) {
+        return res.status(400).send({status:false,message:'User is not found'})
     } else {
         try {
             const salt = await bcrypt.genSalt(10)
@@ -92,7 +94,10 @@ const createUser =async (req, res) => {
               });
 
               const profile= await Profile.findOne({user_id:user._id});
+              profile.token=token;
+              profile.save();
             return res.status(200).json({
+                status:true,
                 message:"Login SuccessFully", 
                 token:token,
                 data:{
@@ -102,11 +107,11 @@ const createUser =async (req, res) => {
                 }
              });
            }else{
-            return res.status(200).json({message:"Wrong Password"});
+            return res.status(200).json({status:true,message:"Wrong Password"});
            }
             
         } catch (err) {
-            return res.status(400).json({ message: err.message })
+            return res.status(400).json({status:false, message: err.message })
         }
     }
  };
@@ -115,15 +120,19 @@ const createUser =async (req, res) => {
 
  ///Login user api.......................................
  const logOutUser =async (req, res)=>{
-    console.log(req.header.aut);
-    const token = req.headers.authorization?.split(' ')[1];
-
-    
     try {
-    
+    const profile=await Profile.findOne({user_id:req.userData._id});
+    if(profile){
+        profile.token='';
+        profile.save();
         return res.status(200).json({
             status:true,
             message:"Logout SuccessFully"});
+    }else{
+        return res.status(200).json({
+            status:false,
+            message:"Session already expired"});
+    }
         
     } catch (err) {
         return res.status(400).json({ message: err.message })

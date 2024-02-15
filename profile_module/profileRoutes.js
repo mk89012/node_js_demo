@@ -2,7 +2,7 @@ require('dotenv').config()
 const fs=require("fs");
 const express = require("express");
 const profileController=require("./profileController");
-const { authenticate } = require('../auth_module/middle_ware/authenticate');
+const { authenticate } = require('../middle_ware/authenticate');
 const router=express.Router();
 var multer = require('multer');
 

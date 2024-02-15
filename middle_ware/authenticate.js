@@ -1,13 +1,18 @@
 require('dotenv').config()
 const jwt = require('jsonwebtoken');
-const {User} = require('../authModel');
+const {User} = require('../auth_module/authModel');
+const {Profile} = require('../profile_module/profileModel');
+
+
 
 const authenticate = async (req, res, next) => {
   const token = req.headers.authorization?.split(' ')[1];
+  const profile = await Profile.findOne({token:token});
 
-  
   if (!token) {
     return res.status(401).json({ message: 'Authentication required' });
+  }else if(!profile){
+    return res.status(401).json({ message: 'Invalid Token' });
   }
 
   try {

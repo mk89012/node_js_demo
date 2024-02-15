@@ -18,12 +18,15 @@ const profileSchema = new mongoose.Schema({
         type: String,
         unique: true,
         require:true,
-        min: 5,
+        min: 5, 
         max: 255
     },
    
     profilePictureURL: {
         type: String
+    },
+    token:{
+        type : String
     }
   
 })
