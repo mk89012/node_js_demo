@@ -58,9 +58,9 @@ const createUser =async (req, res) => {
        
             return res.status(201).json({status:true,message:"Register SuccessFully", token: token,
             data:{
-                name:profile.name,
-                email:profile.email,
-                profile_img:profile.profilePictureURL,
+                // name:profile.name,
+                // email:profile.email,
+                // profile_img:profile.profilePictureURL,
                 sdf:"dsfd",
                 reqs:req.get("host")
             }});
