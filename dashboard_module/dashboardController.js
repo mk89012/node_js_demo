@@ -10,7 +10,7 @@ var db=mongoose.connection;
 
 
 
-////create user api ......................................
+////dashboard api ......................................
 const dashboardData =async (req, res) => {
     let recomendedSongs = await RecomendedSongs.find();
     let myPlayListAlbum = await MyPlayListAlbum.find();
@@ -19,8 +19,7 @@ const dashboardData =async (req, res) => {
     let combined = myPlayListAlbum.map(item => ({ item, songs: mySongsPlaylist.filter((f) =>{
        var string = JSON.stringify(f);
        var objectValue = JSON.parse(string);
-      
-        return  objectValue.album_id == item._id;
+        return objectValue.album_id == item._id;
     })}));
     try{
             res.status(200).json({ 
@@ -28,7 +27,7 @@ const dashboardData =async (req, res) => {
                 message: "SuccessFully Fetched",
                 data:{
                     "recomended_songs":recomendedSongs,
-                    "myPlayListAlbum":combined,
+                    "play_list_album":combined,
                 }
                
              });
