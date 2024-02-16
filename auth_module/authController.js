@@ -61,6 +61,7 @@ const createUser =async (req, res) => {
                 name:profile.name,
                 email:profile.email,
                 profile_img:profile.profilePictureURL,
+                sdf:"dsfd",
                 reqs:req.get("host")
             }});
         } catch (err) {
