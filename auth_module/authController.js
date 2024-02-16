@@ -60,7 +60,7 @@ const createUser =async (req, res) => {
             data:{
                 name:profile.name,
                 email:profile.email,
-                profile_img:profile.profilePictureURL,
+                profile_img:imageUrl,
             }});
         } catch (err) {
             return res.status(400).json({status:false, message: err.message })
