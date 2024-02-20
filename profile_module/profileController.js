@@ -23,7 +23,7 @@ const updateUserProfile =async (req, res) => {
         var imageName='';
         var imageurl="";
         if(req.file!=null){
-            imageName =req.file.filename.slice(0,req.file.filename.lastIndexOf("-"))
+            imageName =req.file.filename
             imageurl= url + '/upload/' + imageName;
         }
 
