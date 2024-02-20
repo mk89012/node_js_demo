@@ -55,6 +55,7 @@ const createUser =async (req, res) => {
                 token: token
               });
              
+              console.log(imageUrl);
        
             return res.status(201).json({status:true,message:"Register SuccessFully", token: token,
             data:{

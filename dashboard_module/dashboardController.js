@@ -16,13 +16,13 @@ const dashboardData =async (req, res) => {
     let myPlayListAlbum = await MyPlayListAlbum.find();
     let mySongsPlaylist = await MySongsPlaylist.find();
 
-    let combined = myPlayListAlbum.map(item => ({ item, songs: mySongsPlaylist.filter((f) =>{
+    let combined = myPlayListAlbum.map(item => ({ "_id":item._id, "album_image":item.album_image,"album_name":item.album_name, songs: mySongsPlaylist.filter((f) =>{
        var string = JSON.stringify(f);
        var objectValue = JSON.parse(string);
         return objectValue.album_id == item._id;
     })}));
     try{
-            res.status(200).json({ 
+            res.status(200).json({  
                 status:true,
                 message: "SuccessFully Fetched",
                 data:{
