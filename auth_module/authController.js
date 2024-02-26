@@ -33,7 +33,7 @@ const createUser =async (req, res) => {
             var imageName;
             var imageUrl='';
             if(req.file!=null){
-                 imageName =req.file.filename
+                 imageName =req.file.filename;
                  imageUrl= url + '/upload/' + imageName;
             }
            

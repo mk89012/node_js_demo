@@ -1,18 +1,17 @@
 require('dotenv').config()
 const express = require("express");
 const morgan = require("morgan");
+const mongoose = require('mongoose');
+const server = express();
 const authRouter = require("./auth_module/authRoutes");
 const profileRouter = require("./profile_module/profileRoutes");
 const dashboardRouter = require("./dashboard_module/dashboardRoutes");
 
 
-const mongoose = require('mongoose');
-const server = express();
 
 
 
   mongoose.set("strictQuery",false)
-
   const connectDB= async function main() {
     try{
     const con=  await mongoose.connect(process.env.CONNECTION_URL);
